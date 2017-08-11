@@ -40,7 +40,21 @@ elif 'euler' in platform.node():
     netcdf_include = '/cluster/apps/netcdf/4.3.1/x86_64/gcc_4.8.2/openmpi_1.6.5/include'
     netcdf_lib = '/cluster/apps/netcdf/4.3.1/x86_64/gcc_4.8.2/openmpi_1.6.5/lib'
     f_compiler = 'gfortran'
-elif platform.machine()  == 'x86_64':
+elif 'sampo' in platform.node():
+    #Compile flags for fram @ Caltech
+    library_dirs = string.split(os.environ['LD_LIBRARY_PATH'],':')  
+    libraries = []
+    libraries.append('mpi')
+    libraries.append('gfortran')
+    extensions = []
+    extra_compile_args=[]
+    extra_compile_args+=['-std=c99', '-O3', '-march=native', '-Wno-unused',
+                         '-Wno-#warnings', '-Wno-maybe-uninitialized', '-Wno-cpp', '-Wno-array-bounds','-fPIC']
+    extra_objects=['./RRTMG/rrtmg_build/rrtmg_combined.o']
+    netcdf_include = '/export/data1/ajaruga/clones/netcdf-4.4/localnetcdf/include'
+    netcdf_lib = '/export/data1/ajaruga/clones/netcdf-4.4/localnetcdf/lib'
+    f_compiler = 'gfortran'
+elif platform.machine()  == 'x86_64' and 'sampo' not in platform.node():
     #Compile flags for fram @ Caltech
     library_dirs = string.split(os.environ['LD_LIBRARY_PATH'],':')  
     libraries = []
@@ -54,7 +68,6 @@ elif platform.machine()  == 'x86_64':
     netcdf_include = '/share/apps/software/rhel6/software/netCDF/4.4.0-foss-2016a/include'
     netcdf_lib = '/share/apps/software/rhel6/software/netCDF/4.4.0-foss-2016a/lib'
     f_compiler = 'gfortran'
-
 else:
     print('Unknown system platform: ' + sys.platform  + 'or unknown system name: ' + platform.node())
     sys.exit()
