@@ -478,14 +478,14 @@ def DYCOMS_RF01():
     namelist['grid']['nx'] = 96
     namelist['grid']['ny'] = 96
     namelist['grid']['nz'] = 300
-    namelist['grid']['gw'] = 5
+    namelist['grid']['gw'] = 3
     namelist['grid']['dx'] = 35.0
     namelist['grid']['dy'] = 35.0
     namelist['grid']['dz'] = 5.0
 
     namelist['mpi'] = {}
-    namelist['mpi']['nprocx'] = 1
-    namelist['mpi']['nprocy'] = 1
+    namelist['mpi']['nprocx'] = 4
+    namelist['mpi']['nprocy'] = 4
     namelist['mpi']['nprocz'] = 1
 
     namelist['time_stepping'] = {}
@@ -499,10 +499,13 @@ def DYCOMS_RF01():
     namelist['thermodynamics']['latentheat'] = 'constant'
 
     namelist['microphysics'] = {}
-    namelist['microphysics']['scheme'] = 'None_SA'
     namelist['microphysics']['phase_partitioning'] = 'liquid_only'
-    namelist['microphysics']['cloud_sedimentation'] = False
     namelist['microphysics']['ccn'] = 100.0e6
+    namelist['microphysics']['cloud_sedimentation'] = True
+    namelist['microphysics']['scheme'] = 'SB_Liquid'
+    namelist['microphysics']['SB_Liquid'] = {}
+    namelist['microphysics']['SB_Liquid']['nu_droplet'] = 0
+    namelist['microphysics']['SB_Liquid']['mu_rain'] = 1
 
     namelist['sgs'] = {}
     namelist['sgs']['scheme'] = 'Smagorinsky'
@@ -511,10 +514,10 @@ def DYCOMS_RF01():
     namelist['diffusion']['qt_entropy_source'] = False
 
     namelist['momentum_transport'] = {}
-    namelist['momentum_transport']['order'] = 7
+    namelist['momentum_transport']['order'] = 5
 
     namelist['scalar_transport'] = {}
-    namelist['scalar_transport']['order'] = 7
+    namelist['scalar_transport']['order'] = 5
 
     namelist['damping'] = {}
     namelist['damping']['scheme'] = 'Rayleigh'
@@ -538,14 +541,16 @@ def DYCOMS_RF01():
 
     namelist['fields_io'] = {}
     namelist['fields_io']['fields_dir'] = 'fields'
-    namelist['fields_io']['frequency'] = 3600.0
-    namelist['fields_io']['diagnostic_fields'] = ['ql','temperature','buoyancy_frequency','viscosity']
+    namelist['fields_io']['frequency'] = 3600.0 / 4.
+    namelist['fields_io']['diagnostic_fields'] = ['ql','qr','temperature','buoyancy_frequency','buoyancy','viscosity','thetali']
 
     namelist['conditional_stats'] ={}
     namelist['conditional_stats']['classes'] = ['Spectra']
     namelist['conditional_stats']['frequency'] = 600.0
     namelist['conditional_stats']['stats_dir'] = 'cond_stats'
 
+    namelist['tracers'] = {}
+    namelist['tracers']['use_tracers'] = True
 
     namelist['visualization'] = {}
     namelist['visualization']['frequency'] = 1e6
