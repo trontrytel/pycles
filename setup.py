@@ -48,7 +48,7 @@ elif 'sampo' in platform.node():
     libraries.append('gfortran')
     extensions = []
     extra_compile_args=[]
-    extra_compile_args+=['-std=c99', '-O3', '-march=native', '-Wno-unused',
+    extra_compile_args+=['-std=c99', '-O3', '-Wno-unused',
                          '-Wno-#warnings', '-Wno-maybe-uninitialized', '-Wno-cpp', '-Wno-array-bounds','-fPIC']
     extra_objects=['./RRTMG/rrtmg_build/rrtmg_combined.o']
     netcdf_include = '/export/data1/ajaruga/clones/netcdf-4.4/localnetcdf/include'
