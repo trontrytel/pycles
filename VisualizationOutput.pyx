@@ -111,8 +111,8 @@ cdef class VisualizationOutput:
         cdef:
             double [:,:] local_var
             double [:,:] reduced_var
-            list pv_vars = ['s', 'c_srf_15']
-            list dv_vars = []
+            list pv_vars = ['u', 'v', 'w']
+            list dv_vars = ['qv', 'temperature']
 
         # -------------------------------------------------------------------------------------
         for var in pv_vars:
@@ -124,6 +124,8 @@ cdef class VisualizationOutput:
 
                 # first index of variable var
                 var_shift = PV.get_varshift(Gr, var)
+                T_shift   = DV.get_varshift(Gr, 'temperature')
+                qv_shift  = DV.get_varshift(Gr, 'qv')
 
                 with nogil:
                     # figuring out where each processor is
@@ -149,26 +151,26 @@ cdef class VisualizationOutput:
                 del reduced_var
 
                 # horizontal slice
-                k = 53 
-                local_lwp = np.zeros((Gr.dims.n[0], Gr.dims.n[1]), dtype=np.double, order='c')
-                reduced_lwp = np.zeros((Gr.dims.n[0], Gr.dims.n[1]), dtype=np.double, order='c')
-                with nogil:
-                    for i in xrange(imin, imax):
-                        ishift = i * istride
-                        for j in xrange(jmin, jmax):
-                            jshift = j * jstride
-                            ijk = ishift + jshift + k
-                            i2d = global_shift_i + i - Gr.dims.gw
-                            j2d = global_shift_j + j - Gr.dims.gw
+                #k = 53 
+                #local_lwp = np.zeros((Gr.dims.n[0], Gr.dims.n[1]), dtype=np.double, order='c')
+                #reduced_lwp = np.zeros((Gr.dims.n[0], Gr.dims.n[1]), dtype=np.double, order='c')
+                #with nogil:
+                #    for i in xrange(imin, imax):
+                #        ishift = i * istride
+                #        for j in xrange(jmin, jmax):
+                #            jshift = j * jstride
+                #            ijk = ishift + jshift + k
+                #            i2d = global_shift_i + i - Gr.dims.gw
+                #            j2d = global_shift_j + j - Gr.dims.gw
 
-                            local_lwp[i2d, j2d] += (PV.values[var_shift + ijk] )
+                #            local_lwp[i2d, j2d] += (PV.values[var_shift + ijk] )
 
-                comm.Reduce(local_lwp, reduced_lwp, op=MPI.SUM)
+                #comm.Reduce(local_lwp, reduced_lwp, op=MPI.SUM)
 
-                del local_lwp
-                if Pa.rank == 0:
-                    out_dict[var + '_h'] = np.array(reduced_lwp,dtype=np.double)
-                del reduced_lwp
+                #del local_lwp
+                #if Pa.rank == 0:
+                #    out_dict[var + '_h'] = np.array(reduced_lwp,dtype=np.double)
+                #del reduced_lwp
 
             else:
                 Pa.root_print('Trouble Writing ' + var)
@@ -200,32 +202,35 @@ cdef class VisualizationOutput:
                 del local_var
                 if Pa.rank == 0:
                     out_dict[var] = np.array(reduced_var, dtype=np.double)[:,:] - np.mean(reduced_var,axis=0)
+                    if var == 'temperature':
+                        print var
+                        print out_dict[var]
                 del reduced_var
 
-                # horizontal slice
-                k = 53 
-                local_lwp = np.zeros((Gr.dims.n[0], Gr.dims.n[1]), dtype=np.double, order='c')
-                reduced_lwp = np.zeros((Gr.dims.n[0], Gr.dims.n[1]), dtype=np.double, order='c')
-                with nogil:
-                    for i in xrange(imin, imax):
-                        ishift = i * istride
-                        for j in xrange(jmin, jmax):
-                            jshift = j * jstride
-                            ijk = ishift + jshift + k
-                            i2d = global_shift_i + i - Gr.dims.gw
-                            j2d = global_shift_j + j - Gr.dims.gw
+        #        # horizontal slice
+        #        k = 53 
+        #        local_lwp = np.zeros((Gr.dims.n[0], Gr.dims.n[1]), dtype=np.double, order='c')
+        #        reduced_lwp = np.zeros((Gr.dims.n[0], Gr.dims.n[1]), dtype=np.double, order='c')
+        #        with nogil:
+        #            for i in xrange(imin, imax):
+        #                ishift = i * istride
+        #                for j in xrange(jmin, jmax):
+        #                    jshift = j * jstride
+        #                    ijk = ishift + jshift + k
+        #                    i2d = global_shift_i + i - Gr.dims.gw
+        #                    j2d = global_shift_j + j - Gr.dims.gw
 
-                            local_lwp[i2d, j2d] += (DV.values[var_shift + ijk] )
+        #                    local_lwp[i2d, j2d] += (DV.values[var_shift + ijk] )
 
-                comm.Reduce(local_lwp, reduced_lwp, op=MPI.SUM)
+        #        comm.Reduce(local_lwp, reduced_lwp, op=MPI.SUM)
 
-                del local_lwp
-                if Pa.rank == 0:
-                    out_dict[var + '_h'] = np.array(reduced_lwp,dtype=np.double)
-                del reduced_lwp
+        #        del local_lwp
+        #        if Pa.rank == 0:
+        #            out_dict[var + '_h'] = np.array(reduced_lwp,dtype=np.double)
+        #        del reduced_lwp
 
-            else:
-                Pa.root_print('Trouble Writing ' + var)
+        #    else:
+        #        Pa.root_print('Trouble Writing ' + var)
 
 
         if Pa.rank == 0:
