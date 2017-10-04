@@ -124,8 +124,6 @@ cdef class VisualizationOutput:
 
                 # first index of variable var
                 var_shift = PV.get_varshift(Gr, var)
-                T_shift   = DV.get_varshift(Gr, 'temperature')
-                qv_shift  = DV.get_varshift(Gr, 'qv')
 
                 with nogil:
                     # figuring out where each processor is
@@ -186,16 +184,16 @@ cdef class VisualizationOutput:
                 var_shift = DV.get_varshift(Gr, var)
 
                 with nogil:
-                    if global_shift_j == 0:
-                        j = 0
-                        jshift = j * jstride
-                        for i in xrange(imin, imax):
-                            ishift = i * istride
+                    if global_shift_i == 0:
+                        i = 0
+                        ishift = i * istride
+                        for j in xrange(jmin, jmax):
+                            jshift = j * jstride
                             for k in xrange(kmin, kmax):
                                 ijk = ishift + jshift + k
-                                i2d = global_shift_i + i - Gr.dims.gw
+                                j2d = global_shift_j + j - Gr.dims.gw
                                 k2d = global_shift_k + k - Gr.dims.gw
-                                local_var[i2d, k2d] = DV.values[var_shift + ijk]
+                                local_var[j2d, k2d] = DV.values[var_shift + ijk]
 
                 comm.Reduce(local_var, reduced_var, op=MPI.SUM)
 
