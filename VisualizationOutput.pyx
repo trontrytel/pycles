@@ -129,16 +129,16 @@ cdef class VisualizationOutput:
 
                 with nogil:
                     # figuring out where each processor is
-                    if global_shift_j == 0:
-                        j = 0
-                        jshift = j * istride
-                        for i in xrange(imin, imax):
-                            ishift = i * istride
+                    if global_shift_i == 0:
+                        i = 0
+                        ishift = i * istride
+                        for j in xrange(jmin, jmax):
+                            jshift = j * jstride
                             for k in xrange(kmin, kmax):
                                 ijk = ishift + jshift + k
-                                i2d = global_shift_i + i - Gr.dims.gw
+                                j2d = global_shift_j + j - Gr.dims.gw
                                 k2d = global_shift_k + k - Gr.dims.gw
-                                local_var[i2d, k2d] = PV.values[var_shift + ijk]
+                                local_var[j2d, k2d] = PV.values[var_shift + ijk]
 
                 # communication from all cores 
                 # reduce to rank 0 (i.e. send all the data to rank 0)
@@ -201,7 +201,8 @@ cdef class VisualizationOutput:
 
                 del local_var
                 if Pa.rank == 0:
-                    out_dict[var] = np.array(reduced_var, dtype=np.double)[:,:] - np.mean(reduced_var,axis=0)
+                    #out_dict[var] = np.array(reduced_var, dtype=np.double)[:,:] - np.mean(reduced_var,axis=0)
+                    out_dict[var] = np.array(reduced_var, dtype=np.double)
                     if var == 'temperature':
                         print var
                         print out_dict[var]
