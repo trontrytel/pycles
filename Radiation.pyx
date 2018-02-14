@@ -38,6 +38,7 @@ def RadiationFactory(namelist, LatentHeat LH, ParallelMPI.ParallelMPI Pa):
         casename = namelist['meta']['casename']
         if casename == 'DYCOMS_RF01':
             return RadiationDyCOMS_RF01(namelist)
+            #return RadiationNone()
         elif casename == 'DYCOMS_RF02':
             #Dycoms RF01 and RF02 use the same radiation
             return RadiationDyCOMS_RF01(namelist)

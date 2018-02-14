@@ -55,6 +55,7 @@ def SurfaceFactory(namelist, LatentHeat LH, ParallelMPI.ParallelMPI Par):
             return SurfaceGabls(namelist,LH)
         elif casename == 'DYCOMS_RF01':
             return SurfaceDYCOMS_RF01(namelist, LH)
+            #return SurfaceNone()
         elif casename == 'DYCOMS_RF02':
             return SurfaceDYCOMS_RF02(namelist, LH)
         elif casename == 'Rico':

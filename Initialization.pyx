@@ -545,13 +545,25 @@ def InitDYCOMS_RF01(namelist,Grid.Grid Gr,PrognosticVariables.PrognosticVariable
             jshift = jstride * j
             for k in xrange(Gr.dims.nlg[2]):
                 ijk = ishift + jshift + k
+                #i1k = jshift + k
                 PV.values[ijk + u_varshift] = 0.0
                 PV.values[ijk + v_varshift] = 0.0
                 PV.values[ijk + w_varshift] = 0.0
                 PV.values[ijk + qt_varshift]  = qt[k]
 
+                #if Pa.rank == 0:
+                #    print "i       = ", i
+                #    print "ishift  = ", ishift
+                #    print "istride = ", istride
+                #    print "j       = ", j
+                #    print "jshift  = ", jshift
+                #    print "jstride = ", jstride
+                #    print "k       = ", k
+                #    print ijk,  " vs ", i1k
+
                 #Now set the entropy prognostic variable including a potential temperature perturbation
                 if Gr.zl_half[k] < 200.0:
+                    #theta_pert_ = (theta_pert[i1k] - 0.5)* 0.1
                     theta_pert_ = (theta_pert[ijk] - 0.5)* 0.1
                 else:
                     theta_pert_ = 0.0

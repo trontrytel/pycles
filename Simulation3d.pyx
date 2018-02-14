@@ -204,7 +204,7 @@ class Simulation3d:
             condstats_dt = self.CondStatsIO.last_output_time + self.CondStatsIO.frequency - self.TS.t
             restart_dt = self.Restart.last_restart_time + self.Restart.frequency - self.TS.t
             vis_dt = self.VO.last_vis_time + self.VO.frequency - self.TS.t
-
+      
 
             dts = np.array([fields_dt, stats_dt, condstats_dt, restart_dt, vis_dt,
                             self.TS.dt, self.TS.dt_max, self.VO.frequency, self.Restart.frequency,
