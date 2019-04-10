@@ -994,7 +994,8 @@ cdef updraft_indicator_sc_w_ql(Grid.DimStruct *dims,  double *tracer_raw, double
     if z_ct > z_cb:
         with nogil:
             for k in xrange(dims.nlg[2]):
-                if z_half[k] >= z_ql and z_half[k] <= z_ct:
+                #if z_half[k] >= z_ql and z_half[k] <= z_ct:
+                if z_half[k] >= z_cb and z_half[k] <= z_ct:
                     for i in xrange(dims.nlg[0]):
                         for j in xrange(dims.nlg[1]):
                             ijk = i * istride + j * jstride + k

@@ -289,7 +289,7 @@ def StableBubble():
     namelist['restart']['input_path'] = './'
     namelist['restart']['frequency'] = 600.0
 
-    namelist['conditional_stats'] = {} 
+    namelist['conditional_stats'] = {}
 
     namelist['stats_io'] = {}
     namelist['stats_io']['stats_dir'] = 'stats'
@@ -323,8 +323,8 @@ def Bomex():
     namelist['grid']['dz'] = 100 / 2.5
 
     namelist['mpi'] = {}
-    namelist['mpi']['nprocx'] = 1
-    namelist['mpi']['nprocy'] = 1
+    namelist['mpi']['nprocx'] = 8
+    namelist['mpi']['nprocy'] = 8
     namelist['mpi']['nprocz'] = 1
 
     namelist['time_stepping'] = {}
@@ -360,7 +360,7 @@ def Bomex():
     namelist['damping']['Rayleigh']['z_d'] = 600
 
     namelist['output'] = {}
-    namelist['output']['output_root'] = './'
+    namelist['output']['output_root'] = '/central/groups/esm/ajaruga/'
 
     namelist['restart'] = {}
     namelist['restart']['output'] = True
@@ -370,13 +370,13 @@ def Bomex():
 
     namelist['stats_io'] = {}
     namelist['stats_io']['stats_dir'] = 'stats'
-    namelist['stats_io']['auxiliary'] = ['Cumulus','TKE']
-    namelist['stats_io']['frequency'] = 60.0
+    namelist['stats_io']['auxiliary'] = ['Flux', 'Cumulus', 'TKE']
+    namelist['stats_io']['frequency'] = 20.0
 
     namelist['fields_io'] = {}
     namelist['fields_io']['fields_dir'] = 'fields'
     namelist['fields_io']['frequency'] = 1800.0
-    namelist['fields_io']['diagnostic_fields'] = ['ql','temperature','buoyancy_frequency','viscosity']
+    namelist['fields_io']['diagnostic_fields'] = ['ql','temperature','buoyancy_frequency', 'thetali', 'buoyancy', 'viscosity']
 
     namelist['conditional_stats'] ={}
     namelist['conditional_stats']['classes'] = ['Spectra']
@@ -392,8 +392,11 @@ def Bomex():
 
     namelist['tracers'] = {}
     namelist['tracers']['use_tracers'] = True
-    namelist['tracers']['scheme'] = 'PurityTracers'
+    namelist['tracers']['scheme'] = 'UpdraftTracers'
     namelist['tracers']['use_lcl_tracers'] = False
+
+    namelist['visualization'] = {}
+    namelist['visualization']['frequency'] = 1e5
 
     return namelist
 
@@ -497,8 +500,8 @@ def DYCOMS_RF01():
     namelist['grid']['dz'] = 5.0
 
     namelist['mpi'] = {}
-    namelist['mpi']['nprocx'] = 1
-    namelist['mpi']['nprocy'] = 1
+    namelist['mpi']['nprocx'] = 8
+    namelist['mpi']['nprocy'] = 8
     namelist['mpi']['nprocz'] = 1
 
     namelist['time_stepping'] = {}
@@ -515,7 +518,6 @@ def DYCOMS_RF01():
     namelist['microphysics']['scheme'] = 'None_SA'
     namelist['microphysics']['phase_partitioning'] = 'liquid_only'
     namelist['microphysics']['cloud_sedimentation'] = False
-    namelist['microphysics']['ccn'] = 100.0e6
 
     namelist['radiation'] = {}
     namelist['radiation']['use_RRTM'] = True
@@ -526,7 +528,7 @@ def DYCOMS_RF01():
     namelist['sgs']['scheme'] = 'Smagorinsky'
     namelist['sgs']['Smagorinsky'] = {}
     namelist['sgs']['Smagorinsky']['iles'] = True
-    
+
     namelist['diffusion'] = {}
     namelist['diffusion']['qt_entropy_source'] = False
 
@@ -543,7 +545,7 @@ def DYCOMS_RF01():
     namelist['damping']['Rayleigh']['z_d'] = 500.0
 
     namelist['output'] = {}
-    namelist['output']['output_root'] = './'
+    namelist['output']['output_root'] = '/central/groups/esm/ajaruga/'
 
     namelist['restart'] = {}
     namelist['restart']['output'] = True
@@ -553,19 +555,23 @@ def DYCOMS_RF01():
 
     namelist['stats_io'] = {}
     namelist['stats_io']['stats_dir'] = 'stats'
-    namelist['stats_io']['auxiliary'] = ['DYCOMS', 'Flux']
-    namelist['stats_io']['frequency'] = 60.0
+    namelist['stats_io']['auxiliary'] = ['Flux', 'Cumulus', 'TKE']
+    namelist['stats_io']['frequency'] = 10.0
 
     namelist['fields_io'] = {}
     namelist['fields_io']['fields_dir'] = 'fields'
     namelist['fields_io']['frequency'] = 3600.0
-    namelist['fields_io']['diagnostic_fields'] = ['ql','temperature','buoyancy_frequency']
+    namelist['fields_io']['diagnostic_fields'] = ['ql','temperature','buoyancy_frequency', 'thetali', 'buoyancy']
 
     namelist['conditional_stats'] ={}
     namelist['conditional_stats']['classes'] = ['Spectra']
     namelist['conditional_stats']['frequency'] = 600.0
     namelist['conditional_stats']['stats_dir'] = 'cond_stats'
 
+    namelist['tracers'] = {}
+    namelist['tracers']['use_tracers'] = True
+    namelist['tracers']['scheme'] = 'UpdraftTracers'
+    namelist['tracers']['use_lcl_tracers'] = False
 
     namelist['visualization'] = {}
     namelist['visualization']['frequency'] = 1e6
@@ -613,7 +619,7 @@ def DYCOMS_RF02():
 
     namelist['sgs'] = {}
     namelist['sgs']['scheme'] = 'Smagorinsky'
-    namelist['sgs']['Smagorinsky'] = {} 
+    namelist['sgs']['Smagorinsky'] = {}
     namelist['sgs']['Smagorinsky']['iles'] = True
 
     namelist['diffusion'] = {}
@@ -771,8 +777,8 @@ def Rico():
     namelist['grid']['dz'] = 40.0
 
     namelist['mpi'] = {}
-    namelist['mpi']['nprocx'] = 1
-    namelist['mpi']['nprocy'] = 1
+    namelist['mpi']['nprocx'] = 16
+    namelist['mpi']['nprocy'] = 16
     namelist['mpi']['nprocz'] = 1
 
     namelist['time_stepping'] = {}
@@ -789,13 +795,11 @@ def Rico():
     namelist['microphysics']['phase_partitioning'] = 'liquid_only'
     namelist['microphysics']['cloud_sedimentation'] = False
     namelist['microphysics']['ccn'] = 70.0e6
-    namelist['microphysics']['scheme'] = 'SB_Liquid'
-    namelist['microphysics']['SB_Liquid'] = {}
-
-    namelist['microphysics']['SB_Liquid']['nu_droplet'] = 0
-    namelist['microphysics']['SB_Liquid']['mu_rain'] = 1
-
-
+    namelist['microphysics']['scheme'] = 'T_Liquid'
+    #namelist['microphysics']['scheme'] = 'SB_Liquid'
+    #namelist['microphysics']['SB_Liquid'] = {}
+    #namelist['microphysics']['SB_Liquid']['nu_droplet'] = 0
+    #namelist['microphysics']['SB_Liquid']['mu_rain'] = 1
 
     namelist['sgs'] = {}
     namelist['sgs']['scheme'] = 'Smagorinsky'
@@ -817,17 +821,17 @@ def Rico():
     namelist['damping']['Rayleigh']['z_d'] = 800
 
     namelist['output'] = {}
-    namelist['output']['output_root'] = './'
+    namelist['output']['output_root'] = '/central/groups/esm/ajaruga/'
 
     namelist['stats_io'] = {}
     namelist['stats_io']['stats_dir'] = 'stats'
-    namelist['stats_io']['auxiliary'] = ['Cumulus']
-    namelist['stats_io']['frequency'] = 60.0
+    namelist['stats_io']['auxiliary'] = ['Flux', 'Cumulus', 'TKE']
+    namelist['stats_io']['frequency'] = 20.0
 
     namelist['fields_io'] = {}
     namelist['fields_io']['fields_dir'] = 'fields'
     namelist['fields_io']['frequency'] = 1800.0
-    namelist['fields_io']['diagnostic_fields'] = ['ql','temperature','buoyancy_frequency','viscosity']
+    namelist['fields_io']['diagnostic_fields'] = ['ql','temperature','buoyancy_frequency', 'thetali', 'buoyancy', 'viscosity']
 
     namelist['meta'] = {}
     namelist['meta']['simname'] = 'Rico'
@@ -844,6 +848,13 @@ def Rico():
     namelist['conditional_stats']['frequency'] = 600.0
     namelist['conditional_stats']['stats_dir'] = 'cond_stats'
 
+    namelist['tracers'] = {}
+    namelist['tracers']['use_tracers'] = True
+    namelist['tracers']['scheme'] = 'UpdraftTracers'
+    namelist['tracers']['use_lcl_tracers'] = False
+
+    namelist['visualization'] = {}
+    namelist['visualization']['frequency'] = 1e5
 
     return namelist
 
