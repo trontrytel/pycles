@@ -303,7 +303,7 @@ def StableBubble():
     namelist['restart']['input_path'] = './'
     namelist['restart']['frequency'] = 600.0
 
-    namelist['conditional_stats'] = {} 
+    namelist['conditional_stats'] = {}
 
     namelist['stats_io'] = {}
     namelist['stats_io']['stats_dir'] = 'stats'
@@ -1612,11 +1612,11 @@ def TRMM_LBA():
     namelist['grid']['dx'] = 100.0
     namelist['grid']['dy'] = 100.0
     namelist['grid']['dz'] = 100.0
-    namelist['grid']['stretch'] = True
+    namelist['grid']['stretch'] = False
 
     namelist['mpi'] = {}
-    namelist['mpi']['nprocx'] = 1
-    namelist['mpi']['nprocy'] = 1
+    namelist['mpi']['nprocx'] = 16
+    namelist['mpi']['nprocy'] = 16
     namelist['mpi']['nprocz'] = 1
 
     namelist['time_stepping'] = {}
@@ -1630,7 +1630,7 @@ def TRMM_LBA():
     namelist['thermodynamics']['latentheat'] = 'constant'
 
     namelist['microphysics'] = {}
-    namelist['microphysics']['scheme'] = 'Arctic_1M' #T_Liquid'
+    namelist['microphysics']['scheme'] = 'T_Liquid' #'Arctic_1M' #T_Liquid'
     namelist['microphysics']['phase_partitioning'] = 'liquid_only' # liquid_ice
 
     #namelist['microphysics']['cloud_sedimentation'] = False
@@ -1664,7 +1664,7 @@ def TRMM_LBA():
     namelist['damping']['Rayleigh']['z_d'] = 4000
 
     namelist['output'] = {}
-    namelist['output']['output_root'] = './'
+    namelist['output']['output_root'] = '/central/groups/esm/ajaruga/'
 
     namelist['stats_io'] = {}
     namelist['stats_io']['stats_dir'] = 'stats'
