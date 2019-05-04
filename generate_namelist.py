@@ -1668,8 +1668,8 @@ def TRMM_LBA():
 
     namelist['stats_io'] = {}
     namelist['stats_io']['stats_dir'] = 'stats'
-    namelist['stats_io']['auxiliary'] = ['Cumulus']
-    namelist['stats_io']['frequency'] = 100.0
+    namelist['stats_io']['auxiliary'] = ['Flux', 'Cumulus', 'TKE']
+    namelist['stats_io']['frequency'] = 30.0
 
     namelist['fields_io'] = {}
     namelist['fields_io']['fields_dir'] = 'fields'
