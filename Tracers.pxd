@@ -31,6 +31,7 @@ cdef class TracersNone:
 cdef class UpdraftTracers:
     cdef:
         bint lcl_tracers
+        double timescale
         Py_ssize_t index_lcl
         dict tracer_dict
         double cloud_base
@@ -52,6 +53,7 @@ cdef class UpdraftTracers:
 cdef class PurityTracers:
     cdef:
        UpdraftTracers TracersUpdraft
+       double timescale
 
     cpdef initialize(self, Grid.Grid Gr,  PrognosticVariables.PrognosticVariables PV,
                      DiagnosticVariables.DiagnosticVariables DV, NetCDFIO_Stats NS, ParallelMPI.ParallelMPI Pa)

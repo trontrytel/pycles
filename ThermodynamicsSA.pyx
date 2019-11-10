@@ -19,7 +19,7 @@ from NetCDFIO cimport NetCDFIO_Stats, NetCDFIO_Fields
 from libc.math cimport fmax, fmin
 
 cdef extern from "thermodynamics_sa.h":
-    double alpha_c(double p0, double T, double qt, double qv) nogil
+    inline double alpha_c(double p0, double T, double qt, double qv) nogil
     void eos_c(Lookup.LookupStruct *LT, double(*lam_fp)(double), double(*L_fp)(double, double), double p0, double s, double qt, double *T, double *qv, double *ql, double *qi) nogil
     void eos_update(Grid.DimStruct *dims, Lookup.LookupStruct *LT, double(*lam_fp)(double), double(*L_fp)(double, double), double *p0, double *s, double *qt, double *T,
                     double * qv, double * ql, double * qi, double * alpha)
@@ -30,18 +30,18 @@ cdef extern from "thermodynamics_sa.h":
 
 cdef extern from "thermodynamic_functions.h":
     # Dry air partial pressure
-    double pd_c(double p0, double qt, double qv) nogil
+    inline double pd_c(double p0, double qt, double qv) nogil
     # Water vapor partial pressure
-    double pv_c(double p0, double qt, double qv) nogil
+    inline double pv_c(double p0, double qt, double qv) nogil
 
 
 cdef extern from "entropies.h":
     # Specific entropy of dry air
-    double sd_c(double pd, double T) nogil
+    inline double sd_c(double pd, double T) nogil
     # Specific entropy of water vapor
-    double sv_c(double pv, double T) nogil
+    inline double sv_c(double pv, double T) nogil
     # Specific entropy of condensed water
-    double sc_c(double L, double T) nogil
+    inline double sc_c(double L, double T) nogil
 
 
 cdef class ThermodynamicsSA:
@@ -95,7 +95,6 @@ cdef class ThermodynamicsSA:
         DV.add_variables('qi', 'kg/kg', r'q_i', 'ice water specific humidity', 'sym', Pa)
         DV.add_variables('theta_rho', 'K', r'\theta_{\rho}', 'density potential temperature', 'sym', Pa)
         DV.add_variables('thetali', 'K', r'\theta_l', r'liqiud water potential temperature', 'sym', Pa)
-
 
         # Add statistical output
         NS.add_profile('thetas_mean', Gr, Pa)
@@ -465,8 +464,8 @@ cdef class ThermodynamicsSA:
             for pi in xrange(z_pencil.n_local_pencils):
                 for k in xrange(kmin, kmax):
                     if ql_pencils[pi, k] > 0.0:
-                        cb = fmin(cb, Gr.z_half[gw + k])
-                        ct = fmax(ct, Gr.z_half[gw + k])
+                        cb = fmin(cb, Gr.zp_half[gw + k])
+                        ct = fmax(ct, Gr.zp_half[gw + k])
 
         cb = Pa.domain_scalar_min(cb)
         ct = Pa.domain_scalar_max(ct)
@@ -483,7 +482,6 @@ cdef class ThermodynamicsSA:
 
             for pi in xrange(z_pencil.n_local_pencils):
                 lwp_weighted_sum += lwp[pi]
-
             lwp_weighted_sum /= mean_divisor
 
         lwp_weighted_sum = Pa.domain_scalar_sum(lwp_weighted_sum)
